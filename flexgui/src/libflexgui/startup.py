@@ -1,10 +1,5 @@
-import os, sys, shutil, re, importlib
+import os, sys, shutil, re, importlib, time
 from functools import partial
-
-import time
-from PyQt6.QtGui import QWindow
-from PyQt6.QtCore import QEvent
-from PyQt5.QtGui import QResizeEvent, QMoveEvent
 
 from PyQt6.QtWidgets import QTabWidget
 from PyQt6.QtWidgets import QPushButton, QListWidget, QPlainTextEdit, QLineEdit
@@ -12,7 +7,7 @@ from PyQt6.QtWidgets import QComboBox, QSlider, QMenu, QToolButton, QWidget
 from PyQt6.QtWidgets import QVBoxLayout, QAbstractButton, QAbstractSpinBox
 from PyQt6.QtWidgets import QLabel, QLCDNumber, QDoubleSpinBox, QListView
 from PyQt6.QtWidgets import QProgressBar
-from PyQt6.QtGui import QAction
+from PyQt6.QtGui import QAction, QWindow
 from PyQt6.QtCore import QSettings
 from PyQt6.QtOpenGLWidgets import QOpenGLWidget
 
