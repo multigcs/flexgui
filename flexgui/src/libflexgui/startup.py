@@ -1,6 +1,12 @@
 import os, sys, shutil, re, importlib
 from functools import partial
 
+import time
+from PyQt6.QtGui import QWindow
+from PyQt6.QtCore import QEvent
+from PyQt5.QtGui import QResizeEvent, QMoveEvent
+
+from PyQt6.QtWidgets import QTabWidget
 from PyQt6.QtWidgets import QPushButton, QListWidget, QPlainTextEdit, QLineEdit
 from PyQt6.QtWidgets import QComboBox, QSlider, QMenu, QToolButton, QWidget
 from PyQt6.QtWidgets import QVBoxLayout, QAbstractButton, QAbstractSpinBox
@@ -1378,6 +1384,36 @@ def setup_watch_var(parent):
 			for line in var_list:
 				if line.startswith(value[0]):
 					getattr(parent, key).setText(f'{float(line.split()[1]):.{value[1]}f}')
+
+class embed_tab(QWidget):
+	def __init__(self, parent=None, cmd=None):
+		super(embed_tab, self).__init__(parent)
+		window = QWindow()
+		self.container = QWidget.createWindowContainer(window, self)
+		window_id = int(window.winId())
+		cmd = cmd.replace("{XID}", f"{window_id}")
+		os.system(cmd)
+		self.show()
+		time.sleep(.2)
+
+	def resizeEvent(self, event):
+		size = event.size()
+		print(size)
+		self.container.resize(size.width(), size.height())
+
+def setup_tabs(parent):
+	embed_tab_commands = parent.inifile.findall('DISPLAY', 'EMBED_TAB_COMMAND')
+	embed_tab_names = parent.inifile.findall('DISPLAY', 'EMBED_TAB_NAME')
+	embed_tab_widget = None
+	for child in parent.findChildren(QTabWidget):
+		if child.property("function") == "embed_tab":
+			embed_tab_widget = child
+			break
+	if embed_tab_widget is not None:
+		for embed_tab_num, embed_tab_name in enumerate(embed_tab_names):
+			embed_tab_command = embed_tab_commands[embed_tab_num]
+			widget = embed_tab(cmd=embed_tab_command)
+			embed_tab_widget.addTab(widget, embed_tab_name)
 
 def setup_hal(parent):
 	hal_labels = []
