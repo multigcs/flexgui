@@ -1408,7 +1408,10 @@ def setup_tabs(parent):
 		for embed_tab_num, embed_tab_name in enumerate(embed_tab_names):
 			embed_tab_command = embed_tab_commands[embed_tab_num]
 			widget = embed_tab(cmd=embed_tab_command)
-			embed_tab_widget.addTab(widget, embed_tab_name)
+			container = QWidget()
+			layout = QVBoxLayout(container)
+			layout.addWidget(widget, stretch=1)
+			embed_tab_widget.addTab(container, embed_tab_name)
 
 def setup_hal(parent):
 	hal_labels = []
