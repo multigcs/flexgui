@@ -1381,19 +1381,14 @@ def setup_watch_var(parent):
 					getattr(parent, key).setText(f'{float(line.split()[1]):.{value[1]}f}')
 
 class embed_tab(QWidget):
-	def __init__(self, parent=None, cmd=None):
+	def __init__(self, parent=None, cmd=None, width=640, height=480):
 		super(embed_tab, self).__init__(parent)
 		window = QWindow()
 		self.container = QWidget.createWindowContainer(window, self)
 		window_id = int(window.winId())
-
-		self.container.resize(883, 426)
-
-		size = self.container.size()
-		w = size.width()
-		h = size.height()
+		self.container.resize(width, height)
 		cmd = cmd.replace("{XID}", f"{window_id}")
-		cmd = cmd.replace("qtvcp -d", f"qtvcp -g {w}x{h} -d")
+		cmd = cmd.replace("qtvcp -d", f"qtvcp -g {width}x{height} -d")
 		os.system(cmd)
 		self.show()
 		time.sleep(.2)
@@ -1414,11 +1409,13 @@ def setup_tabs(parent):
 	if embed_tab_widget is not None:
 		for embed_tab_num, embed_tab_name in enumerate(embed_tab_names):
 			embed_tab_command = embed_tab_commands[embed_tab_num]
-			widget = embed_tab(cmd=embed_tab_command)
 			container = QWidget()
 			layout = QVBoxLayout(container)
-			layout.addWidget(widget, stretch=1)
 			embed_tab_widget.addTab(container, embed_tab_name)
+			widget = embed_tab(cmd=embed_tab_command, width=882, height=425)
+			layout.addWidget(widget, stretch=1)
+	elif embed_tab_names:
+		print("flexgui: error: no QTabWidget found with function: embed_tab")
 
 def setup_hal(parent):
 	hal_labels = []
