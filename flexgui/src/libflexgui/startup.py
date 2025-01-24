@@ -1386,7 +1386,14 @@ class embed_tab(QWidget):
 		window = QWindow()
 		self.container = QWidget.createWindowContainer(window, self)
 		window_id = int(window.winId())
+
+		self.container.resize(883, 426)
+
+		size = self.container.size()
+		w = size.width()
+		h = size.height()
 		cmd = cmd.replace("{XID}", f"{window_id}")
+		cmd = cmd.replace("qtvcp -d", f"qtvcp -g {w}x{h} -d")
 		os.system(cmd)
 		self.show()
 		time.sleep(.2)
